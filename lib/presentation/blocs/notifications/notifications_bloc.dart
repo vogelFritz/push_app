@@ -11,12 +11,16 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationsBloc() : super(const NotificationsState()) {
-    //on<NotificationsEvent>((event, emit) {});
+    on<NotificationsStatusChanged>(_notificationsStatusChanged);
   }
 
   static Future<void> initializeFirebaseNotifications() async {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);
+  }
+
+  void _notificationsStatusChanged(event, emit) {
+    emit(state.copyWith(status: event.status));
   }
 
   void requestPermissions() async {
@@ -29,6 +33,6 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       provisional: false,
       sound: true,
     );
-    settings.authorizationStatus;
+    add(NotificationsStatusChanged(settings.authorizationStatus));
   }
 }
