@@ -21,8 +21,14 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   NotificationsBloc() : super(const NotificationsState()) {
     on<NotificationsStatusChanged>(_notificationsStatusChanged);
+    on<NotificationReceived>(_onPushMessage);
     _initialStatusCheck();
     _onForegroundMessage();
+  }
+
+  void _onPushMessage(event, emit) {
+    emit(state
+        .copyWith(notifications: [event.pushMessage, ...state.notifications]));
   }
 
   static Future<void> initializeFirebaseNotifications() async {
@@ -58,7 +64,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
         imageUrl: Platform.isAndroid
             ? message.notification!.android?.imageUrl
             : message.notification!.apple?.imageUrl);
-    print(notification);
+    add(NotificationReceived(notification));
   }
 
   void _onForegroundMessage() {
