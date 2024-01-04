@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
 
 class _HandleNotificationInteractions extends StatefulWidget {
   final Widget child;
-  const _HandleNotificationInteractions({super.key, required this.child});
+  const _HandleNotificationInteractions({required this.child});
 
   @override
   State<_HandleNotificationInteractions> createState() =>
